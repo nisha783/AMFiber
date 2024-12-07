@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\customer;
+use App\Models\Payment;
 use App\Models\Plai;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Seeder;
@@ -124,5 +127,30 @@ class DatabaseSeeder extends Seeder
         $plai->name = '3';
         $plai->price = '210';
         $plai->save();
+    }
+
+    
+
+    // Method to seed payments
+    private function seedPayments()
+    {
+        // Get all customers from the database
+        $customers = customer::all();
+
+        // Loop through customers and create payment records
+        foreach ($customers as $customer) {
+            Payment::create([
+                'customer_id' => $customer->id, // Link payment to a customer
+                'amount' => rand(100, 1000), // Random amount between 100 and 1000
+                'reduction' => rand(0, 100), // Random reduction between 0 and 100
+                'payment_method' => $this->getRandomPaymentMethod(), // Random payment method
+                'reference' => 'Payment for order #' . rand(1, 100), // Random reference
+            ]);
+        }
+    }
+    private function getRandomPaymentMethod()
+    {
+        $methods = ['Cash', 'Bank', 'Mobicash', 'EasyPaisa'];
+        return $methods[array_rand($methods)];
     }
 }

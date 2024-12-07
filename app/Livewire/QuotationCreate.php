@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class QuotationCreate extends Component
 {
-    public $searchTerm;
+    public $customerSearch = '';
     public $width;
     public $height;
     public $specification;
@@ -29,10 +29,29 @@ class QuotationCreate extends Component
     {
         $this->customers = Party::where('type', 'customer')->get();
     }
-    public function clearSearchterm()
+    public function updatedCustomerSearch()
     {
-        $this->searchTerm = '';
+        if (!empty($this->customerSearch)) {
+            // Perform server-side search
+            $this->customers = Party::where('type', 'customer')
+                ->where(function ($query) {
+                    $query->where('name', 'like', '%' . $this->customerSearch . '%')
+                        ->orWhere('phone', 'like', '%' . $this->customerSearch . '%');
+                })
+                ->limit(50) // Limit results to prevent overwhelming the select
+                ->get();
+        } else {
+            // If search term is empty, fetch all customers
+            $this->customers = Party::where('type', 'customer')->get();
+        }
     }
+
+    public function clearcustomerSearch()
+    {
+        $this->customerSearch = '';
+        $this->customers = Party::where('type', 'customer')->get();
+    }
+
     public function addItem()
     {
         if ($this->width && $this->height && $this->price) {
@@ -133,6 +152,6 @@ class QuotationCreate extends Component
 
     public function render()
     {
-        return view('livewire.quotation-create');
+        return view('livewire.quotation-create', ['customers' => $this->customers]);
     }
 }

@@ -11,9 +11,9 @@
                     type="text"
                     class="form-control"
                     placeholder="Search by name or phone"
-                    wire:model.debounce.500ms="SearchTerm">
+                    wire:model.debounce.500ms="customerSearch">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" wire:click="clearSearchterm">
+                    <button class="btn btn-outline-secondary" type="button" wire:click="clearcustomerSearch">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>

@@ -24,12 +24,7 @@
             <select wire:model="selectedCustomer" name="customer_id" id="customer_id" class="js-select2 form-control">
                 <option value="">Select a Customer</option>
                 @foreach ($customers as $customer)
-                    <option value="{{ $customer->id }}">
-                        {{ $customer->name }} 
-                        @if($customer->email)
-                            ({{ $customer->email }})
-                        @endif
-                    </option>
+                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                 @endforeach
             </select>
         </div>

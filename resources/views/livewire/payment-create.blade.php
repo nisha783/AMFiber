@@ -2,25 +2,8 @@
     <form action="{{ route('payment.store') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label for="customer_search">Search Customer</label>
-            <span wire:loading>
-                <i class="fa fa-spinner fa-spin"></i>
-            </span>
-            <div class="input-group mb-3">
-                <input
-                    type="text"
-                    class="form-control"
-                    placeholder="Search by name, email, or phone"
-                    wire:model.live.debounce.500ms="customerSearch">
-                <div class="input-group-append">
-                    <button
-                        class="btn btn-outline-secondary"
-                        type="button"
-                        wire:click="clearCustomerSearch">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-            </div>
+          
+           
 
             <label for="customer_id">Select Customer</label>
             <select

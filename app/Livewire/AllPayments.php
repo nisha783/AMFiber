@@ -42,7 +42,12 @@ final class AllPayments extends PowerGridComponent
 
     public function relationSearch(): array
     {
-        return [];
+        return [
+            "Party" => [
+                'name',
+                'phone',
+            ]
+        ];
     }
 
     public function addColumns(): PowerGridColumns

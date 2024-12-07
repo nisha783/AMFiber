@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\customer;
 use App\Models\Notification;
 use App\Models\Party;
 use App\Models\Quotation;
@@ -33,20 +34,10 @@ class QuotationCreate extends Component
 
     public function updatedCustomerSearch()
     {
-        if (!empty($this->customerSearch)) {
-            // Perform server-side search
-            $this->customers = Party::where('type', 'customer')
-                ->when($this->customerSearch, function ($query) {
-                    return $query->where(function ($q) {
-                        $q->where('name', 'like', '%' . $this->customerSearch . '%')
-                            ->orWhere('phone', 'like', '%' . $this->customerSearch . '%');
-                    });
-                })
-                ->limit(50) // Limit results to prevent overwhelming the select
-                ->get();
-        } else {
-            $this->customers = Party::where('type', 'customer')->get();
-        }
+        // Get customers based on the search query (name or phone)
+        $this->customers = customer::where('name', 'like', '%' . $this->customerSearch . '%')
+            ->orWhere('phone', 'like', '%' . $this->customerSearch . '%')
+            ->get();
     }
 
     // Method to clear search and reset customers

@@ -13,18 +13,29 @@
                     placeholder="Search by name or phone"
                     wire:model.debounce.500ms="customerSearch">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" wire:click="clearcustomerSearch">
+                    <button class="btn btn-outline-secondary" type="button" wire:click="clearCustomerSearch">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
             </div>
         </div>
         <div class="form-group">
-            <label for="customer_id">Select Customer</label>
-            <select wire:model="selectedCustomer" name="customer_id" id="customer_id" class="js-select2 form-control">
+        <label for="customer_id">Select Customer</label>
+            <select 
+                wire:model.live="selectedCustomer" 
+                name="customer_id" 
+                id="customer_id" 
+                class="js-select2 form-control"
+                wire:key="select-customer-{{ now() }}"
+            >
                 <option value="">Select a Customer</option>
                 @foreach ($customers as $customer)
-                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                    <option value="{{ $customer->id }}">
+                        {{ $customer->name }} 
+                        @if($customer->email)
+                            ({{ $customer->email }})
+                        @endif
+                    </option>
                 @endforeach
             </select>
         </div>

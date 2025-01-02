@@ -2,67 +2,47 @@
 
 namespace App\Livewire;
 
-use App\Models\customer;
 use App\Models\Party;
-use App\Models\Payment;
 use Livewire\Component;
 
 class PaymentCreate extends Component
 {
 
+    public $customerSearch = '';
+    public $selectedCustomer = '';
+    public $customers = [];
 
-        public $selectedCustomer = null;
-        public $search = '';  // Added property for search term
-        public $amount = '';
-        public $reduction = '';
-        public $payment_method = 'Cash';
-        public $reference = '';
-    
-        public $customers = [];
-    
-        protected $rules = [
-            'selectedCustomer' => 'required|exists:customers,id',
-            'amount' => 'required|numeric|min:0',
-            'reduction' => 'nullable|numeric|min:0',
-            'payment_method' => 'required|string',
-            'reference' => 'nullable|string',
-        ];
-    
-        // Filter customers based on search
-        public function updatedSearch()
-        {
-            $this->customers =customer::where('id', 'like', '%' . $this->search . '%')
-                ->orWhere('name', 'like', '%' . $this->search . '%')
-                ->orWhere('email', 'like', '%' . $this->search . '%')
-                ->orWhere('phone', 'like', '%' . $this->search . '%')
+    public function updatedCustomerSearch()
+    {
+        if (!empty($this->customerSearch)) {
+            // Perform server-side search
+            $this->customers = Party::where('type', 'customer')
+                ->when($this->customerSearch, function ($query) {
+                    return $query->where(function ($q) {
+                        $q->where('name', 'like', '%' . $this->customerSearch . '%')
+                            ->orWhere('phone', 'like', '%' . $this->customerSearch . '%');
+                    });
+                })
+                ->limit(50) // Limit results to prevent overwhelming the select
                 ->get();
+        } else {
+            $this->customers = Party::where('type', 'customer')->get();
         }
-    
-        public function mount()
-        {
-            $this->customers = Customer::all(); // Get all customers initially
-        }
-    
-        public function submit()
-        {
-            $this->validate(); // Validate the form data
-    
-            Payment::create([
-                'customer_id' => $this->selectedCustomer,
-                'amount' => $this->amount,
-                'reduction' => $this->reduction,
-                'payment_method' => $this->payment_method,
-                'reference' => $this->reference,
-            ]);
-    
-            session()->flash('success', 'Payment added successfully!'); // Success message
-        }
-    
-      
+    }
+
+
+    // Method to clear search and reset customers
+    public function clearCustomerSearch()
+    {
+        $this->customerSearch = '';
+        $this->customers = Party::where('type', 'customer')->get();
+    }
+
    
     public function render()
     {
-        return view('livewire.payment-create');
-         
+        return view('livewire.payment-create', [
+            'customers' => $this->customers,
+        ]);
     }
 }

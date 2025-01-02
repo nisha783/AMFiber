@@ -152,6 +152,7 @@ final class AllProductInvoices extends PowerGridComponent
         ]);
     }
 
+    
     /*
     public function actionRules($row): array
     {

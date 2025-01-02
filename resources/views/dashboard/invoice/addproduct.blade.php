@@ -7,13 +7,11 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="mb-4 text-start d-flex justify-content-between">
+                            <div class="mb-4 text-start">
                                 <a href="{{ route('invoice.index') }}" class="btn btn-primary btn-sm">Back to All Invoice</a>
-
-                                <!-- Add a new button for editing -->
-                                <a href="{{ route('invoice.add-product')}}" class="btn btn-primary btn-sm">Add Item to This Invoice</a>
                             </div>
-                            <livewire:all-product-invoices :invoice="$invoice"/>
+                            @livewire('add-product-to-invoice', ['invoice_id' => $invoice->id])
+
                         </div>
                     </div>
                 </div>

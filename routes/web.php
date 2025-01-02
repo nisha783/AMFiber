@@ -20,7 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('/plai', PlaiController::class);
     Route::resource('/quotation', QuotationController::class);
     Route::get('/invoice/{invoice}/edit_product', [InvoiceController::class, 'edit_product'])->name('invoice.edit_product');
+    Route::get('/invoice/add-product', [InvoiceController::class, 'addproduct'])->name('invoice.add-product');
     Route::resource('/invoice', InvoiceController::class);
+
     Route::resource('/payment', PaymentController::class);
 });
 

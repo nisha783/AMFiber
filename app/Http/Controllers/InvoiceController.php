@@ -29,6 +29,10 @@ class InvoiceController extends Controller
         return view('dashboard.invoice.edit_product', compact('invoice'));
     }
 
+    public function addProduct(Invoice $invoice)
+    {
+        return view('dashboard.invoice.addproduct', compact('invoice'));
+    }
     /**
      * Store a newly created resource in storage.
      */
